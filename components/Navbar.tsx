@@ -13,11 +13,11 @@ export default async function Navbar() {
       <div className="max-w-350 mx-auto px-4 md:px-6 h-14 flex items-center justify-between">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
           <Image 
-            src="/BOWATZ.jpeg" 
+            src="/bowatz.png" 
             alt="Logo bowatz" 
-            width={110}  
-            height={32}  
-            className="object-contain h-7 md:h-8 w-auto" 
+            width={160}  
+            height={44}  
+            className="object-contain h-10 md:h-11 w-auto" 
           />
         </Link>
 

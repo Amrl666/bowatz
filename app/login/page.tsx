@@ -30,7 +30,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm animate-fade-in">
         <div className="text-center mb-8 flex flex-col items-center">
           <Image 
-            src="/BOWATZ.jpeg" 
+            src="/bowatz.png" 
             alt="Logo bowatz" 
             width={140}
             height={42} 
