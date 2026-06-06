@@ -9,11 +9,13 @@ function formatRupiah(n: number) {
   }).format(n)
 }
 
-export default async function DetailBarangPage({ params }: { params: { id: string } }) {
+export default async function DetailBarangPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
   const { data: barang, error } = await supabase
     .from('barang')
     .select('*, gambar:barang_gambar(id, url, urutan)')
-    .eq('id', params.id).single()
+    .eq('id', id).single()
 
   if (error || !barang) notFound()
 

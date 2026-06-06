@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -24,13 +25,15 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const supabaseAuth = await createSupabaseServerClient()
+  
   const body = await req.json()
   const { nama, harga, deskripsi, kondisi, kategori, stok, gambar_urls } = body
 
   if (!nama || !harga)
     return NextResponse.json({ error: 'Nama dan harga wajib diisi' }, { status: 400 })
 
-  const { data: barang, error } = await supabase
+  const { data: barang, error } = await supabaseAuth
     .from('barang')
     .insert({ nama, harga, deskripsi, kondisi, kategori, stok })
     .select().single()
@@ -41,7 +44,8 @@ export async function POST(req: NextRequest) {
     const rows = gambar_urls.map((url: string, i: number) => ({
       barang_id: barang.id, url, urutan: i,
     }))
-    await supabase.from('barang_gambar').insert(rows)
+
+    await supabaseAuth.from('barang_gambar').insert(rows)
   }
 
   return NextResponse.json(barang, { status: 201 })

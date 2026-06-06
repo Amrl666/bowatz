@@ -3,7 +3,7 @@
 import { MessageCircle } from 'lucide-react'
 
 export default function TombolBeli({ namaBarang }: { namaBarang: string }) {
-  const nomorWA = process.env.NEXT_PUBLIC_WA_NUMBER || '628123456789'
+  const nomorWA = process.env.NEXT_PUBLIC_WA_NUMBER 
 
   const handleBeli = () => {
     const pesan = encodeURIComponent(
