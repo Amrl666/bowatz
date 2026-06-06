@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { uploadGambar } from '@/lib/upload'
+import toast from 'react-hot-toast'
 import { X } from 'lucide-react'
 
 const KATEGORI = ['Pakaian', 'Sepatu', 'Aksesoris', 'Elektronik', 'Lainnya']
@@ -58,12 +59,20 @@ export default function FormBarang({ initialData, mode }: Props) {
       }
       const url    = mode === 'edit' && initialData?.id ? `/api/barang/${initialData.id}` : '/api/barang'
       const method = mode === 'edit' ? 'PUT' : 'POST'
-      const res    = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
-      if (!res.ok) throw new Error()
+      const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      
+      if (!res.ok) {
+        const errorData = await res.json()
+        toast.error(`Gagal: ${errorData.error}`)
+        throw new Error(errorData.error)
+      }
+      
+      toast.success(mode === 'tambah' ? 'Barang berhasil ditambahkan!' : 'Perubahan disimpan!') // ← Toast sukses
+      
       router.push('/admin')
       router.refresh()
-    } catch {
-      alert('Terjadi kesalahan, coba lagi.')
+    } catch (err) {
+      console.error(err)
     } finally {
       setLoading(false)
     }

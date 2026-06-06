@@ -1,4 +1,4 @@
-import { supabase, type Barang } from '@/lib/supabase'
+import { supabase, type Barang } from '@/lib/supabase' // ← 1. Import type Barang di sini
 import BarangCard from '@/components/BarangCard'
 import SidebarFilter from '@/components/SidebarFilter'
 import Pagination from '@/components/Pagination'
@@ -52,61 +52,70 @@ export default async function HomePage({
   const baseUrl = `/?${baseParams.toString()}`
 
   return (
-    <main className="max-w-350 mx-auto px-6 py-6">
-      {/* Search bar atas */}
-      <form action="/" method="GET" className="mb-6">
-        <input
-          type="text"
-          name="q"
-          defaultValue={pencarian}
-          placeholder="Cari barang..."
-          className="w-full max-w-sm px-3 py-2 text-[13px] bg-brand-surface border border-brand-border
-                     text-brand-text placeholder:text-brand-text-faint
-                     focus:outline-none focus:border-brand-border-dark"
-        />
-        {kategoriAktif !== 'Semua' && (
-          <input type="hidden" name="kategori" value={kategoriAktif} />
-        )}
-      </form>
 
-      {/* Layout: sidebar kiri + grid kanan */}
-      <div className="flex gap-10">
-        {/* Sidebar Filter */}
-        <SidebarFilter
-          kategoriList={kategoriCount}
-          totalSemua={rawCount?.length || 0}
-          aktif={kategoriAktif}
-        />
+    <main className="max-w-350 mx-auto px-6 py-10">
+      <div className="mb-10 border-b border-brand-border pb-8">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-brand-text mb-4 uppercase">
+          {kategoriAktif === 'Semua' ? 'Koleksi Bowatzzz' : kategoriAktif}
+        </h1>
+        <p className="text-[13px] text-brand-text-muted max-w-2xl leading-relaxed">
+          Arsip pakaian dan aksesoris kurasi terbaik. 
+          Menampilkan {count || 0} produk pilihan dengan kondisi {statusFilter === 'tersedia' ? 'yang masih tersedia' : 'terbaik'}.
+        </p>
+      </div>
 
-        {/* Area Grid */}
+      <div className="flex flex-col md:flex-row gap-10">
+        <div className="w-full md:w-56 shrink-0 md:sticky top-20 h-fit space-y-8">
+          <form action="/" method="GET">
+            <input
+              type="text"
+              name="q"
+              defaultValue={pencarian}
+              placeholder="Cari barang..."
+              className="w-full px-3 py-2.5 text-[13px] bg-brand-surface border border-brand-border
+                         text-brand-text placeholder:text-brand-text-faint
+                         focus:outline-none focus:border-brand-text transition-colors"
+            />
+            {kategoriAktif !== 'Semua' && (
+              <input type="hidden" name="kategori" value={kategoriAktif} />
+            )}
+          </form>
+
+          <SidebarFilter
+            kategoriList={kategoriCount}
+            totalSemua={rawCount?.length || 0}
+            aktif={kategoriAktif}
+          />
+        </div>
+
         <div className="flex-1 min-w-0">
-          {/* Keterangan hasil */}
           <div className="flex items-center justify-between mb-4">
-            <p className="text-[11px] text-brand-text-muted uppercase tracking-widest">
-              {count || 0} PRODUK
-              {kategoriAktif !== 'Semua' && ` · ${kategoriAktif.toUpperCase()}`}
+            <p className="text-[11px] text-brand-text-muted uppercase tracking-widest font-semibold">
+              {count || 0} Hasil
             </p>
           </div>
 
-          {/* Grid 4 kolom — gap-px supaya border 1px antar card */}
           {barangList && barangList.length > 0 ? (
-            <div className="border border-brand-border">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-brand-border">
+            <div className="border border-brand-border border-b-0">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-brand-border">
                 {barangList.map((barang) => (
-                  <div key={barang.id} className="bg-brand-bg">
-                    <BarangCard barang={barang as Barang} /> 
+                  <div key={barang.id} className="bg-brand-bg h-full">
+                    <BarangCard barang={barang as Barang} />
                   </div>
                 ))}
               </div>
             </div>
           ) : (
-            <div className="border border-brand-border py-20 text-center text-brand-text-faint text-[13px]">
-              Belum ada produk
+            <div className="border border-brand-border py-32 text-center text-brand-text-faint text-[13px]">
+              Tidak ada barang yang ditemukan.
             </div>
           )}
 
           {/* Pagination */}
-          <Pagination page={page} totalPage={totalPage} baseUrl={baseUrl} />
+          <div className="mt-8 border-t border-brand-border pt-6">
+            <Pagination page={page} totalPage={totalPage} baseUrl={baseUrl} />
+          </div>
+
         </div>
       </div>
     </main>
