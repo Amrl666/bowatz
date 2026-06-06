@@ -32,7 +32,6 @@ export default async function HomePage({
 
   const { data: barangList, count } = await query
 
-  // Query hitung per-kategori untuk sidebar
   const { data: rawCount } = await supabase
     .from('barang')
     .select('kategori')
@@ -46,7 +45,6 @@ export default async function HomePage({
 
   const totalPage = Math.ceil((count || 0) / PER_PAGE)
 
-  // URL base untuk pagination (pertahankan filter)
   const baseParams = new URLSearchParams()
   if (kategoriAktif !== 'Semua') baseParams.set('kategori', kategoriAktif)
   if (pencarian) baseParams.set('q', pencarian)
@@ -58,15 +56,24 @@ export default async function HomePage({
       <div className="flex flex-col md:flex-row gap-6 md:gap-10">
         <div className="w-full md:w-56 shrink-0 md:sticky top-20 h-fit space-y-4 md:space-y-8">
           <form action="/" method="GET">
-            <input
-              type="text"
-              name="q"
-              defaultValue={pencarian}
-              placeholder="Cari barang..."
-              className="w-full px-3 py-2.5 text-[13px] bg-brand-surface border border-brand-border
-                         text-brand-text placeholder:text-brand-text-faint
-                         focus:outline-none focus:border-brand-text transition-colors"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                name="q"
+                defaultValue={pencarian}
+                placeholder="Cari barang..."
+                className="w-full pl-3 pr-8 py-2.5 text-[13px] bg-brand-surface border border-brand-border
+                           text-brand-text placeholder:text-brand-text-faint
+                           focus:outline-none focus:border-brand-text transition-all duration-200"
+              />
+              {pencarian && (
+                <button type="button" 
+                  onClick={() => window.location.href = '/'}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-brand-text-faint hover:text-brand-text transition-colors text-[16px] leading-none">
+                  &times;
+                </button>
+              )}
+            </div>
             {kategoriAktif !== 'Semua' && (
               <input type="hidden" name="kategori" value={kategoriAktif} />
             )}
@@ -80,32 +87,42 @@ export default async function HomePage({
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-5">
             <p className="text-[11px] text-brand-text-muted uppercase tracking-widest font-semibold">
               {count || 0} Hasil
             </p>
+            {pencarian && (
+              <p className="text-[11px] text-brand-text-faint">
+                Pencarian: &ldquo;{pencarian}&rdquo;
+              </p>
+            )}
           </div>
 
           {barangList && barangList.length > 0 ? (
-            <div className="border border-brand-border border-b-0">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-brand-border">
-                {barangList.map((barang) => (
-                  <div key={barang.id} className="bg-brand-bg h-full">
-                    <BarangCard barang={barang as Barang} />
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+              {barangList.map((barang) => (
+                <div key={barang.id} className="bg-brand-surface border border-brand-border
+                                                hover:shadow-lg hover:shadow-black/5 transition-shadow duration-300">
+                  <BarangCard barang={barang as Barang} />
+                </div>
+              ))}
             </div>
           ) : (
-            <div className="border border-brand-border py-32 text-center text-brand-text-faint text-[13px]">
-              Tidak ada barang yang ditemukan.
+            <div className="border-2 border-dashed border-brand-border py-24 text-center">
+              <p className="text-[14px] text-brand-text-muted font-medium mb-1">
+                Tidak ada barang ditemukan
+              </p>
+              <p className="text-[12px] text-brand-text-faint">
+                Coba ubah filter atau kata kunci pencarian
+              </p>
             </div>
           )}
 
-          {/* Pagination */}
-          <div className="mt-8 border-t border-brand-border pt-6">
-            <Pagination page={page} totalPage={totalPage} baseUrl={baseUrl} />
-          </div>
+          {totalPage > 1 && (
+            <div className="mt-10 border-t border-brand-border pt-6">
+              <Pagination page={page} totalPage={totalPage} baseUrl={baseUrl} />
+            </div>
+          )}
 
         </div>
       </div>

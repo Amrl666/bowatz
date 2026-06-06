@@ -14,19 +14,18 @@ export default function BarangCard({ barang }: { barang: Barang }) {
 
   return (
     <Link href={`/barang/${barang.id}`} className="group block bg-brand-surface">
-      {/* Foto — rasio 4:5 seperti Grailed */}
       <div className="relative overflow-hidden bg-brand-bg" style={{ aspectRatio: '4/5' }}>
         <Image
           src={fotoUtama}
           alt={barang.nama}
           fill
-          className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+          className="object-cover group-hover:scale-[1.05] transition-transform duration-700 ease-out"
           sizes="(max-width: 640px) 50vw, 25vw"
         />
 
-        {/* Overlay TERJUAL: gelap + border putih tipis, bukan warna solid */}
         {barang.terjual && (
-          <div className="absolute inset-0 bg-brand-text/60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-brand-text/60 flex items-center justify-center
+                          backdrop-blur-[1px]">
             <span className="text-white text-[11px] font-semibold tracking-[0.2em] uppercase
                              border border-white/60 px-3 py-1">
               TERJUAL
@@ -34,26 +33,26 @@ export default function BarangCard({ barang }: { barang: Barang }) {
           </div>
         )}
 
-        {/* Indikator jumlah foto — minimalis */}
         {jumlahFoto > 1 && (
-          <div className="absolute bottom-2 right-2 bg-white/80 text-brand-text-muted
-                          text-[10px] px-1.5 py-0.5 font-medium">
+          <div className="absolute bottom-2 right-2 bg-black/50 text-white/90
+                          text-[10px] px-1.5 py-0.5 font-medium backdrop-blur-sm">
             1/{jumlahFoto}
           </div>
         )}
       </div>
 
-      {/* Info — tipografi kecil ala Grailed */}
-      <div className="px-1 pt-1.5 pb-2 space-y-0.5">
-        <p className="text-[12px] text-brand-text leading-snug line-clamp-2 group-hover:text-brand-amber transition-colors">
+      <div className="px-2 pt-2 pb-3 space-y-1">
+        <p className="text-[12px] text-brand-text leading-snug line-clamp-2
+                      group-hover:text-brand-amber transition-colors duration-300">
           {barang.nama}
         </p>
-        <p className="text-[12px] font-semibold text-brand-text">
+        <p className="text-[13px] font-bold text-brand-text tracking-tight">
           {formatRupiah(barang.harga)}
         </p>
-        <p className="text-[10px] text-brand-text-faint uppercase tracking-widest">
+        <p className="text-[10px] text-brand-text-faint uppercase tracking-widest font-medium">
           {barang.kondisi}
-          {barang.kategori && ` · ${barang.kategori}`}
+          {barang.kategori && <span className="text-brand-text-faint/50 mx-1">|</span>}
+          {barang.kategori}
         </p>
       </div>
     </Link>

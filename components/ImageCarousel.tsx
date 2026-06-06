@@ -21,37 +21,45 @@ export default function ImageCarousel({ gambar }: { gambar: BarangGambar[] }) {
   const next = () => setAktif(i => (i === gambar.length - 1 ? 0 : i + 1))
 
   return (
-    <div className="space-y-2">
-      {/* Foto utama */}
-      <div className="relative bg-brand-bg border border-brand-border" style={{ aspectRatio: '4/5' }}>
-        <Image src={gambar[aktif].url} alt={`Foto ${aktif + 1}`} fill className="object-cover" />
+    <div className="space-y-3">
+      <div className="relative bg-brand-bg border border-brand-border overflow-hidden" style={{ aspectRatio: '4/5' }}>
+        <Image
+          src={gambar[aktif].url}
+          alt={`Foto ${aktif + 1}`}
+          fill
+          className="object-cover"
+          priority
+        />
         {gambar.length > 1 && (
           <>
             <button onClick={prev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white
-                         border border-brand-border p-1 transition-colors">
-              <ChevronLeft size={16} />
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white
+                         border border-brand-border p-2 transition-all duration-200
+                         hover:shadow-md hover:scale-105 active:scale-95">
+              <ChevronLeft size={18} />
             </button>
             <button onClick={next}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white
-                         border border-brand-border p-1 transition-colors">
-              <ChevronRight size={16} />
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white
+                         border border-brand-border p-2 transition-all duration-200
+                         hover:shadow-md hover:scale-105 active:scale-95">
+              <ChevronRight size={18} />
             </button>
-            <div className="absolute bottom-2 right-2 bg-white/80 text-brand-text-muted
-                            text-[10px] px-1.5 py-0.5">
-              {aktif + 1}/{gambar.length}
+            <div className="absolute bottom-3 right-3 bg-black/50 text-white/90
+                            text-[10px] px-2 py-1 font-medium tracking-wider backdrop-blur-sm">
+              {aktif + 1} / {gambar.length}
             </div>
           </>
         )}
       </div>
 
-      {/* Thumbnail strip */}
       {gambar.length > 1 && (
-        <div className="flex gap-1 overflow-x-auto">
+        <div className="flex gap-1.5 overflow-x-auto pb-1">
           {gambar.map((g, i) => (
             <button key={g.id} onClick={() => setAktif(i)}
-              className={`shrink-0 w-12 h-12 md:w-14 md:h-14 relative border transition-colors ${
-                i === aktif ? 'border-brand-text' : 'border-brand-border hover:border-brand-border-dark'
+              className={`shrink-0 w-[56px] h-[56px] md:w-[64px] md:h-[64px] relative border-2 transition-all duration-200 ${
+                i === aktif
+                  ? 'border-brand-text opacity-100'
+                  : 'border-transparent opacity-60 hover:opacity-100 hover:border-brand-border-dark'
               }`}>
               <Image src={g.url} alt="" fill className="object-cover" />
             </button>

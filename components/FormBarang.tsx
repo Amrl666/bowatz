@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { uploadGambar } from '@/lib/upload'
 import toast from 'react-hot-toast'
-import { X } from 'lucide-react'
+import { X, Upload, Save, Plus } from 'lucide-react'
 
 const KATEGORI = ['Pakaian', 'Sepatu', 'Aksesoris', 'Elektronik', 'Lainnya']
 
@@ -67,7 +67,7 @@ export default function FormBarang({ initialData, mode }: Props) {
         throw new Error(errorData.error)
       }
       
-      toast.success(mode === 'tambah' ? 'Barang berhasil ditambahkan!' : 'Perubahan disimpan!') // ← Toast sukses
+      toast.success(mode === 'tambah' ? 'Barang berhasil ditambahkan!' : 'Perubahan disimpan!')
       
       router.push('/admin')
       router.refresh()
@@ -78,64 +78,70 @@ export default function FormBarang({ initialData, mode }: Props) {
     }
   }
 
-  // Input style — desain flat mengikuti brand
-  const inp = "w-full bg-white border border-brand-border px-3 py-2 text-[13px] text-brand-text placeholder:text-brand-text-faint focus:outline-none focus:border-brand-border-dark"
+  const inp = "w-full bg-white border-2 border-brand-border px-4 py-3 text-[13px] text-brand-text placeholder:text-brand-text-faint focus:outline-none focus:border-brand-text transition-all duration-200"
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 max-w-xl">
-      {/* Upload Foto */}
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-2">
+        <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-2.5">
           Foto Barang
         </label>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           {preview.map((src, i) => (
-            <div key={i} className="relative w-20 h-20">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt="" className="w-full h-full object-cover border border-brand-border" />
+            <div key={i} className="relative w-[92px] h-[92px] border-2 border-brand-border overflow-hidden group">
+              <img src={src} alt="" className="w-full h-full object-cover" />
               <button type="button" onClick={() => hapusPreview(i)}
-                className="absolute -top-1.5 -right-1.5 bg-brand-text text-white w-4 h-4 flex items-center justify-center">
-                <X size={10} />
+                className="absolute top-1.5 right-1.5 bg-brand-text/70 hover:bg-red-500 text-white w-5 h-5 flex items-center justify-center
+                           opacity-0 group-hover:opacity-100 transition-all duration-200">
+                <X size={12} />
               </button>
               {i === 0 && (
-                <span className="absolute bottom-0 left-0 right-0 bg-brand-text/70 text-white
-                                 text-[9px] text-center py-0.5 tracking-widest uppercase">
+                <span className="absolute bottom-0 left-0 right-0 bg-brand-amber text-white
+                                 text-[8px] text-center py-1 tracking-widest uppercase font-bold">
                   Utama
                 </span>
               )}
             </div>
           ))}
-          <label className="w-20 h-20 border border-dashed border-brand-border-dark flex items-center
+          <label className="w-[92px] h-[92px] border-2 border-dashed border-brand-border-dark flex flex-col items-center
                             justify-center cursor-pointer hover:border-brand-amber text-brand-text-faint
-                            hover:text-brand-amber text-2xl transition-colors">
-            +
+                            hover:text-brand-amber transition-all duration-200 gap-1.5 bg-brand-bg/30">
+            <Upload size={18} />
+            <span className="text-[8px] font-bold tracking-widest uppercase">Upload</span>
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileChange} />
           </label>
         </div>
       </div>
 
       <div>
-        <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-1">Nama Barang *</label>
+        <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-1.5">
+          Nama Barang <span className="text-red-400">*</span>
+        </label>
         <input type="text" required value={form.nama} onChange={e => setForm({...form, nama: e.target.value})}
-          className={inp} placeholder="Kaos Polos Hitam Size L" />
+          className={inp} placeholder="Contoh: Kaos Polos Hitam Size L" />
       </div>
 
       <div>
-        <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-1">Harga (Rp) *</label>
-        <input type="number" required min={0} value={form.harga} onChange={e => setForm({...form, harga: e.target.value})}
-          className={inp} placeholder="150000" />
+        <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-1.5">
+          Harga <span className="text-red-400">*</span>
+        </label>
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[13px] font-bold text-brand-text-faint">Rp</span>
+          <input type="number" required min={0} value={form.harga} onChange={e => setForm({...form, harga: e.target.value})}
+            className={`${inp} pl-10`} placeholder="150000" />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-1">Kondisi</label>
+          <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-1.5">Kondisi</label>
           <select value={form.kondisi} onChange={e => setForm({...form, kondisi: e.target.value})} className={inp}>
             <option value="Baru">Baru</option>
             <option value="Bekas">Bekas</option>
           </select>
         </div>
         <div>
-          <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-1">Kategori</label>
+          <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-1.5">Kategori</label>
           <select value={form.kategori} onChange={e => setForm({...form, kategori: e.target.value})} className={inp}>
             <option value="">Pilih kategori</option>
             {KATEGORI.map(k => <option key={k} value={k}>{k}</option>)}
@@ -143,22 +149,40 @@ export default function FormBarang({ initialData, mode }: Props) {
         </div>
       </div>
 
-      <div>
-        <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-1">Stok</label>
-        <input type="number" min={0} value={form.stok} onChange={e => setForm({...form, stok: e.target.value})} className={inp} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-1.5">Stok</label>
+          <input type="number" min={0} value={form.stok} onChange={e => setForm({...form, stok: e.target.value})} className={inp} />
+        </div>
+        <div className="sm:flex sm:items-end">
+          <div className="w-full">
+            <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-1.5 opacity-0 select-none sm:block hidden">
+              Spacer
+            </label>
+          </div>
+        </div>
       </div>
 
       <div>
-        <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-1">Deskripsi</label>
+        <label className="block text-[10px] font-bold tracking-widest uppercase text-brand-text mb-1.5">Deskripsi</label>
         <textarea rows={4} value={form.deskripsi} onChange={e => setForm({...form, deskripsi: e.target.value})}
           className={`${inp} resize-none`} placeholder="Ukuran, bahan, kondisi detail..." />
       </div>
 
-      <button type="submit" disabled={loading}
-        className="w-full bg-brand-text text-white py-3.5 md:py-3 text-[12px] font-semibold tracking-widest uppercase
-                   hover:bg-brand-text/80 transition-colors disabled:opacity-50 min-h-[44px]">
-        {loading ? 'MENYIMPAN...' : mode === 'tambah' ? 'TAMBAH BARANG' : 'SIMPAN PERUBAHAN'}
-      </button>
+      <div className="border-t-2 border-brand-border pt-6">
+        <button type="submit" disabled={loading}
+          className="w-full inline-flex items-center justify-center gap-2 bg-brand-text text-white py-3.5 md:py-3 text-[12px] font-bold tracking-widest uppercase
+                     hover:bg-brand-text/80 transition-all duration-200 disabled:opacity-50 min-h-[48px]
+                     active:scale-[0.98]">
+          {loading ? (
+            <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent animate-spin rounded-full" />
+          ) : mode === 'tambah' ? (
+            <><Plus size={16} /> Tambah Barang</>
+          ) : (
+            <><Save size={16} /> Simpan Perubahan</>
+          )}
+        </button>
+      </div>
     </form>
   )
 }

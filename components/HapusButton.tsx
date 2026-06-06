@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { Trash2 } from 'lucide-react'
 
 export default function HapusButton({ id }: { id: string }) {
   const router = useRouter()
@@ -14,7 +15,11 @@ export default function HapusButton({ id }: { id: string }) {
 
   return (
     <button onClick={handleHapus}
-      className="text-brand-text-faint hover:text-red-500 transition-colors text-[12px] py-1 min-h-[36px]">
+      className="inline-flex items-center gap-1 text-[11px] font-bold tracking-widest uppercase
+                 border-2 border-brand-border px-2.5 py-1.5
+                 text-brand-text-faint hover:border-red-400 hover:text-red-500 hover:bg-red-50/50
+                 transition-all duration-200 min-h-[36px]">
+      <Trash2 size={12} />
       Hapus
     </button>
   )
