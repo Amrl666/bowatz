@@ -14,7 +14,7 @@ export default function HapusButton({ id }: { id: string }) {
 
   return (
     <button onClick={handleHapus}
-      className="text-brand-text-faint hover:text-red-500 transition-colors text-[12px]">
+      className="text-brand-text-faint hover:text-red-500 transition-colors text-[12px] py-1 min-h-[36px]">
       Hapus
     </button>
   )

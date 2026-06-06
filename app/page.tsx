@@ -1,4 +1,4 @@
-import { supabase, type Barang } from '@/lib/supabase' // ← 1. Import type Barang di sini
+import { supabase, type Barang } from '@/lib/supabase'
 import BarangCard from '@/components/BarangCard'
 import SidebarFilter from '@/components/SidebarFilter'
 import Pagination from '@/components/Pagination'
@@ -8,16 +8,17 @@ const PER_PAGE = 20
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: { kategori?: string; q?: string; page?: string; status?: string }
+  searchParams: Promise<{ kategori?: string; q?: string; page?: string; status?: string }>
 }) {
-  const kategoriAktif = searchParams.kategori || 'Semua'
-  const pencarian     = searchParams.q || ''
-  const statusFilter  = searchParams.status || ''
-  const page          = parseInt(searchParams.page || '1')
+  const sp = await searchParams;
+
+  const kategoriAktif = sp.kategori || 'Semua'
+  const pencarian     = sp.q || ''
+  const statusFilter  = sp.status || ''
+  const page          = parseInt(sp.page || '1')
   const from          = (page - 1) * PER_PAGE
   const to            = from + PER_PAGE - 1
 
-  // Query utama — produk di grid
   let query = supabase
     .from('barang')
     .select('*, gambar:barang_gambar(id, url, urutan)', { count: 'exact' })
@@ -53,19 +54,9 @@ export default async function HomePage({
 
   return (
 
-    <main className="max-w-350 mx-auto px-6 py-10">
-      <div className="mb-10 border-b border-brand-border pb-8">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-brand-text mb-4 uppercase">
-          {kategoriAktif === 'Semua' ? 'Koleksi Bowatzzz' : kategoriAktif}
-        </h1>
-        <p className="text-[13px] text-brand-text-muted max-w-2xl leading-relaxed">
-          Arsip pakaian dan aksesoris kurasi terbaik. 
-          Menampilkan {count || 0} produk pilihan dengan kondisi {statusFilter === 'tersedia' ? 'yang masih tersedia' : 'terbaik'}.
-        </p>
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-10">
-        <div className="w-full md:w-56 shrink-0 md:sticky top-20 h-fit space-y-8">
+    <main className="max-w-350 mx-auto px-4 md:px-6 py-6 md:py-10">
+      <div className="flex flex-col md:flex-row gap-6 md:gap-10">
+        <div className="w-full md:w-56 shrink-0 md:sticky top-20 h-fit space-y-4 md:space-y-8">
           <form action="/" method="GET">
             <input
               type="text"

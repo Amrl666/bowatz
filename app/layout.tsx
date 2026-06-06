@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
   title: 'bowatz',
-  description: 'Katalog produk bowatzzz',
+  description: 'Katalog produk bowatz',
   icons: { icon: '/BOWATZ.jpeg' },
 }
 

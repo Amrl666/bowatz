@@ -18,7 +18,7 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
   if (!barang) notFound()
 
   return (
-    <main className="max-w-2xl mx-auto px-6 py-8">
+    <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 md:py-8">
       <p className="text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-6">
         Admin · Edit Barang
       </p>

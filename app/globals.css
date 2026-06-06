@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warna Brand bowatzzz */
   --color-brand-bg: #FAFAF8;
   --color-brand-surface: #FFFFFF;
   --color-brand-border: #E8E5E0;
@@ -12,6 +11,16 @@
   --color-brand-amber: #D4A017;
   --color-brand-amber-light: #FBF3E0;
 
-  /* Font */
   --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Touch-friendly: mencegah zoom on double-tap di mobile */
+button, a {
+  touch-action: manipulation;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }

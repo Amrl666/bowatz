@@ -23,7 +23,7 @@ export default function LoginPage() {
     router.refresh()
   }
 
-  const inp = "w-full bg-white border border-brand-border px-3 py-2.5 text-[13px] text-brand-text placeholder:text-brand-text-faint focus:outline-none focus:border-brand-border-dark"
+  const inp = "w-full bg-white border border-brand-border px-3 py-3 md:py-2.5 text-[13px] text-brand-text placeholder:text-brand-text-faint focus:outline-none focus:border-brand-border-dark"
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-brand-bg px-4">
@@ -31,9 +31,9 @@ export default function LoginPage() {
         <div className="text-center mb-8 flex flex-col items-center">
           <Image 
             src="/BOWATZ.jpeg" 
-            alt="Logo bowatzzz" 
-            width={160}
-            height={48} 
+            alt="Logo bowatz" 
+            width={140}
+            height={42} 
             className="object-contain mb-2"
           />
           <p className="text-[11px] text-brand-text-faint mt-1 tracking-widest uppercase">
@@ -42,7 +42,7 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleLogin}
-          className="bg-brand-surface border border-brand-border p-6 space-y-4">
+          className="bg-brand-surface border border-brand-border p-5 md:p-6 space-y-4">
           {error && (
             <div className="border border-red-200 bg-red-50 text-red-600 text-[12px] px-3 py-2">
               {error}
@@ -55,7 +55,7 @@ export default function LoginPage() {
             </label>
             <input type="email" required value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="admin@bowatzzz.com" className={inp} />
+              placeholder="admin@bowatz.com" className={inp} />
           </div>
 
           <div>
@@ -68,8 +68,8 @@ export default function LoginPage() {
           </div>
 
           <button type="submit" disabled={loading}
-            className="w-full bg-brand-text text-white py-2.5 text-[11px] font-semibold tracking-widest uppercase
-                       hover:bg-brand-text/80 transition-colors disabled:opacity-50">
+            className="w-full bg-brand-text text-white py-3.5 md:py-2.5 text-[11px] font-semibold tracking-widest uppercase
+                       hover:bg-brand-text/80 transition-colors disabled:opacity-50 min-h-[44px]">
             {loading ? 'MASUK...' : 'MASUK'}
           </button>
         </form>

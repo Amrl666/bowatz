@@ -126,7 +126,7 @@ export default function FormBarang({ initialData, mode }: Props) {
           className={inp} placeholder="150000" />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="block text-[10px] font-semibold tracking-widest uppercase text-brand-text-muted mb-1">Kondisi</label>
           <select value={form.kondisi} onChange={e => setForm({...form, kondisi: e.target.value})} className={inp}>
@@ -155,8 +155,8 @@ export default function FormBarang({ initialData, mode }: Props) {
       </div>
 
       <button type="submit" disabled={loading}
-        className="w-full bg-brand-text text-white py-3 text-[12px] font-semibold tracking-widest uppercase
-                   hover:bg-brand-text/80 transition-colors disabled:opacity-50">
+        className="w-full bg-brand-text text-white py-3.5 md:py-3 text-[12px] font-semibold tracking-widest uppercase
+                   hover:bg-brand-text/80 transition-colors disabled:opacity-50 min-h-[44px]">
         {loading ? 'MENYIMPAN...' : mode === 'tambah' ? 'TAMBAH BARANG' : 'SIMPAN PERUBAHAN'}
       </button>
     </form>

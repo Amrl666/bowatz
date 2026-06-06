@@ -50,7 +50,7 @@ export default function ImageCarousel({ gambar }: { gambar: BarangGambar[] }) {
         <div className="flex gap-1 overflow-x-auto">
           {gambar.map((g, i) => (
             <button key={g.id} onClick={() => setAktif(i)}
-              className={`shrink-0 w-14 h-14 relative border transition-colors ${
+              className={`shrink-0 w-12 h-12 md:w-14 md:h-14 relative border transition-colors ${
                 i === aktif ? 'border-brand-text' : 'border-brand-border hover:border-brand-border-dark'
               }`}>
               <Image src={g.url} alt="" fill className="object-cover" />
