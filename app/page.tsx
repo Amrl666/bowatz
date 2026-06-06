@@ -1,65 +1,114 @@
-import Image from "next/image";
+import { supabase, type Barang } from '@/lib/supabase'
+import BarangCard from '@/components/BarangCard'
+import SidebarFilter from '@/components/SidebarFilter'
+import Pagination from '@/components/Pagination'
 
-export default function Home() {
+const PER_PAGE = 20
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: { kategori?: string; q?: string; page?: string; status?: string }
+}) {
+  const kategoriAktif = searchParams.kategori || 'Semua'
+  const pencarian     = searchParams.q || ''
+  const statusFilter  = searchParams.status || ''
+  const page          = parseInt(searchParams.page || '1')
+  const from          = (page - 1) * PER_PAGE
+  const to            = from + PER_PAGE - 1
+
+  // Query utama — produk di grid
+  let query = supabase
+    .from('barang')
+    .select('*, gambar:barang_gambar(id, url, urutan)', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(from, to)
+
+  if (kategoriAktif !== 'Semua') query = query.eq('kategori', kategoriAktif)
+  if (pencarian) query = query.ilike('nama', `%${pencarian}%`)
+  if (statusFilter === 'tersedia') query = query.eq('terjual', false)
+  if (statusFilter === 'terjual')  query = query.eq('terjual', true)
+
+  const { data: barangList, count } = await query
+
+  // Query hitung per-kategori untuk sidebar
+  const { data: rawCount } = await supabase
+    .from('barang')
+    .select('kategori')
+  
+  const kategoriCount = (rawCount || []).reduce((acc: { kategori: string; jumlah: number }[], b: { kategori: string }) => {
+    const found = acc.find(x => x.kategori === b.kategori)
+    if (found) found.jumlah++
+    else if (b.kategori) acc.push({ kategori: b.kategori, jumlah: 1 })
+    return acc
+  }, [])
+
+  const totalPage = Math.ceil((count || 0) / PER_PAGE)
+
+  // URL base untuk pagination (pertahankan filter)
+  const baseParams = new URLSearchParams()
+  if (kategoriAktif !== 'Semua') baseParams.set('kategori', kategoriAktif)
+  if (pencarian) baseParams.set('q', pencarian)
+  const baseUrl = `/?${baseParams.toString()}`
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="max-w-350 mx-auto px-6 py-6">
+      {/* Search bar atas */}
+      <form action="/" method="GET" className="mb-6">
+        <input
+          type="text"
+          name="q"
+          defaultValue={pencarian}
+          placeholder="Cari barang..."
+          className="w-full max-w-sm px-3 py-2 text-[13px] bg-brand-surface border border-brand-border
+                     text-brand-text placeholder:text-brand-text-faint
+                     focus:outline-none focus:border-brand-border-dark"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        {kategoriAktif !== 'Semua' && (
+          <input type="hidden" name="kategori" value={kategoriAktif} />
+        )}
+      </form>
+
+      {/* Layout: sidebar kiri + grid kanan */}
+      <div className="flex gap-10">
+        {/* Sidebar Filter */}
+        <SidebarFilter
+          kategoriList={kategoriCount}
+          totalSemua={rawCount?.length || 0}
+          aktif={kategoriAktif}
+        />
+
+        {/* Area Grid */}
+        <div className="flex-1 min-w-0">
+          {/* Keterangan hasil */}
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-[11px] text-brand-text-muted uppercase tracking-widest">
+              {count || 0} PRODUK
+              {kategoriAktif !== 'Semua' && ` · ${kategoriAktif.toUpperCase()}`}
+            </p>
+          </div>
+
+          {/* Grid 4 kolom — gap-px supaya border 1px antar card */}
+          {barangList && barangList.length > 0 ? (
+            <div className="border border-brand-border">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-brand-border">
+                {barangList.map((barang) => (
+                  <div key={barang.id} className="bg-brand-bg">
+                    <BarangCard barang={barang as Barang} /> 
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="border border-brand-border py-20 text-center text-brand-text-faint text-[13px]">
+              Belum ada produk
+            </div>
+          )}
+
+          {/* Pagination */}
+          <Pagination page={page} totalPage={totalPage} baseUrl={baseUrl} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      </div>
+    </main>
+  )
 }
