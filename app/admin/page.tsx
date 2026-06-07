@@ -89,7 +89,7 @@ export default async function AdminPage() {
                     </p>
                   </td>
                   <td className="px-3 md:px-4 py-2.5 md:py-3">
-                    <p className="text-xs text-gray-500 whitespace-nowrap">{b.kondisi}</p>
+                    <p className="text-xs text-gray-500 whitespace-nowrap">{b.size}</p>
                   </td>
                   <td className="px-3 md:px-4 py-2.5 md:py-3">
                     <span className={`inline-block text-[10px] font-bold tracking-widest uppercase px-2.5 py-1.5 border-2 ${

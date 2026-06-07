@@ -52,8 +52,8 @@ export default async function DetailBarangPage({ params }: { params: Promise<{ i
 
             <div className="grid grid-cols-3 gap-4 border-y border-gray-200 py-4">
               <div>
-                <p className="text-[10px] font-semibold tracking-widest uppercase text-gray-500 mb-1">Condition</p>
-                <p className="text-[13px] text-gray-900 font-semibold">{barang.kondisi}</p>
+                <p className="text-[10px] font-semibold tracking-widest uppercase text-gray-500 mb-1">Size</p>
+                <p className="text-[13px] text-gray-900 font-semibold">{barang.size}</p>
               </div>
               <div className="border-l border-gray-200 pl-4">
                 <p className="text-[10px] font-semibold tracking-widest uppercase text-gray-500 mb-1">Category</p>

@@ -10,7 +10,7 @@ export type Barang = {
   nama: string
   harga: number
   deskripsi: string | null
-  kondisi: string
+  size: string
   kategori: string | null
   stok: number
   terjual: boolean

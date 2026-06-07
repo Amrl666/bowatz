@@ -23,9 +23,6 @@ export default async function TambahPage() {
         <h1 className="text-xl md:text-2xl font-bold tracking-tight text-gray-900">
           Add Item
         </h1>
-        <p className="text-xs text-gray-500 mt-0.5">
-          Fill in the details of the new item to add to catalog
-        </p>
       </div>
 
       <div className="border-2 border-gray-200 p-5 md:p-8 bg-white">

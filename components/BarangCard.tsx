@@ -62,7 +62,7 @@ export default function BarangCard({ barang }: { barang: Barang }) {
       <Link href={`/barang/${barang.id}`} className="flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-1">
           <span className="font-bold text-sm truncate pr-2 text-gray-900">{barang.kategori || 'Collection'}</span>
-          <span className="text-xs text-gray-500 font-medium whitespace-nowrap">{barang.kondisi}</span>
+          <span className="text-xs text-gray-500 font-medium whitespace-nowrap">{barang.size}</span>
         </div>
 
         <p className="text-sm text-gray-600 line-clamp-2 mb-2 leading-tight">

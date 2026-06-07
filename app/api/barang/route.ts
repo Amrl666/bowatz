@@ -28,14 +28,14 @@ export async function POST(req: NextRequest) {
   const supabaseAuth = await createSupabaseServerClient()
   
   const body = await req.json()
-  const { nama, harga, deskripsi, kondisi, kategori, stok, gambar_urls } = body
+  const { nama, harga, deskripsi, size, kategori, stok, gambar_urls } = body
 
   if (!nama || !harga)
     return NextResponse.json({ error: 'Nama dan harga wajib diisi' }, { status: 400 })
 
   const { data: barang, error } = await supabaseAuth
     .from('barang')
-    .insert({ nama, harga, deskripsi, kondisi, kategori, stok })
+    .insert({ nama, harga, deskripsi, size, kategori, stok })
     .select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

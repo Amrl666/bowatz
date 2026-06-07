@@ -11,7 +11,7 @@ const KATEGORI = ['T-Shirts', 'Shirts', 'Pants', 'Jackets', 'Hoodies & Sweaters'
 type Props = {
   initialData?: {
     id?: string; nama?: string; harga?: number; deskripsi?: string | null
-    kondisi?: string; kategori?: string | null; stok?: number
+    size?: string; kategori?: string | null; stok?: number
     gambar?: { id: string; url: string; urutan: number }[]
   }
   mode: 'tambah' | 'edit'
@@ -27,7 +27,7 @@ export default function FormBarang({ initialData, mode }: Props) {
     nama:      initialData?.nama      || '',
     harga:     initialData?.harga?.toString() || '',
     deskripsi: initialData?.deskripsi || '',
-    kondisi:   initialData?.kondisi   || 'New',
+    size:   initialData?.size   || 'M',
     kategori:  initialData?.kategori  || '',
     stok:      initialData?.stok?.toString() || '1',
   })
@@ -140,10 +140,13 @@ export default function FormBarang({ initialData, mode }: Props) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-900 mb-1.5">Condition</label>
-          <select value={form.kondisi} onChange={e => setForm({...form, kondisi: e.target.value})} className={inp}>
-            <option value="New">New</option>
-            <option value="Used">Used</option>
+          <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-900 mb-1.5">Size</label>
+          <select value={form.size} onChange={e => setForm({...form, size: e.target.value})} className={inp}>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
           </select>
         </div>
         <div>
