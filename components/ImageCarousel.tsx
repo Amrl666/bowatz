@@ -10,9 +10,9 @@ export default function ImageCarousel({ gambar }: { gambar: BarangGambar[] }) {
 
   if (!gambar || gambar.length === 0) {
     return (
-      <div className="aspect-square bg-brand-bg border border-brand-border
-                      flex items-center justify-center text-brand-text-faint text-[13px]">
-        Tidak ada foto
+      <div className="aspect-square bg-gray-100 border border-gray-200
+                      flex items-center justify-center text-gray-400 text-[13px]">
+        No photos
       </div>
     )
   }
@@ -22,10 +22,10 @@ export default function ImageCarousel({ gambar }: { gambar: BarangGambar[] }) {
 
   return (
     <div className="space-y-3">
-      <div className="relative bg-brand-bg border border-brand-border overflow-hidden" style={{ aspectRatio: '4/5' }}>
+      <div className="relative bg-gray-100 border border-gray-200 overflow-hidden rounded-sm" style={{ aspectRatio: '4/5' }}>
         <Image
           src={gambar[aktif].url}
-          alt={`Foto ${aktif + 1}`}
+          alt={`Photo ${aktif + 1}`}
           fill
           className="object-cover"
           priority
@@ -34,13 +34,13 @@ export default function ImageCarousel({ gambar }: { gambar: BarangGambar[] }) {
           <>
             <button onClick={prev}
               className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white
-                         border border-brand-border p-2 transition-all duration-200
+                         border border-gray-200 p-2 transition-all duration-200
                          hover:shadow-md hover:scale-105 active:scale-95">
               <ChevronLeft size={18} />
             </button>
             <button onClick={next}
               className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white
-                         border border-brand-border p-2 transition-all duration-200
+                         border border-gray-200 p-2 transition-all duration-200
                          hover:shadow-md hover:scale-105 active:scale-95">
               <ChevronRight size={18} />
             </button>
@@ -58,8 +58,8 @@ export default function ImageCarousel({ gambar }: { gambar: BarangGambar[] }) {
             <button key={g.id} onClick={() => setAktif(i)}
               className={`shrink-0 w-[56px] h-[56px] md:w-[64px] md:h-[64px] relative border-2 transition-all duration-200 ${
                 i === aktif
-                  ? 'border-brand-text opacity-100'
-                  : 'border-transparent opacity-60 hover:opacity-100 hover:border-brand-border-dark'
+                  ? 'border-gray-900 opacity-100'
+                  : 'border-transparent opacity-60 hover:opacity-100 hover:border-gray-300'
               }`}>
               <Image src={g.url} alt="" fill className="object-cover" />
             </button>

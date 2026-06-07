@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-bg: #FAFAF8;
+  --color-brand-bg: #FFFFFF;
   --color-brand-surface: #FFFFFF;
-  --color-brand-border: #E8E5E0;
-  --color-brand-border-dark: #D0CBC2;
-  --color-brand-text: #1A1A1A;
-  --color-brand-text-muted: #6B6560;
-  --color-brand-text-faint: #A09890;
-  --color-brand-amber: #D4A017;
-  --color-brand-amber-light: #FBF3E0;
+  --color-brand-border: #E5E7EB;
+  --color-brand-border-dark: #D1D5DB;
+  --color-brand-text: #111827;
+  --color-brand-text-muted: #6B7280;
+  --color-brand-text-faint: #9CA3AF;
+  --color-brand-accent: #111827;
+  --color-brand-accent-light: #F3F4F6;
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
 }
@@ -24,8 +24,8 @@ html {
 }
 
 ::selection {
-  background: #D4A017;
-  color: #1A1A1A;
+  background: #111827;
+  color: #FFFFFF;
 }
 
 ::-webkit-scrollbar {
@@ -34,15 +34,15 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #FAFAF8;
+  background: #FFFFFF;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D0CBC2;
+  background: #D1D5DB;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #A09890;
+  background: #9CA3AF;
 }
 
 @keyframes fadeIn {

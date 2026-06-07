@@ -13,26 +13,26 @@ export default function Pagination({ page, totalPage, baseUrl }: Props) {
   const pages = Array.from({ length: totalPage }, (_, i) => i + 1)
     .filter(p => Math.abs(p - page) <= 2)
 
-  const btnBase = "inline-flex items-center justify-center min-w-[36px] h-[36px] border text-[12px] font-medium transition-all duration-200"
+  const btnBase = "inline-flex items-center justify-center min-w-[36px] h-[36px] border-2 text-xs font-medium transition-all duration-200"
 
   return (
     <div className="flex items-center gap-1.5">
       {page > 1
         ? <Link href={pageUrl(page - 1)}
-            className={`${btnBase} border-brand-border text-brand-text-muted hover:border-brand-text hover:text-brand-text bg-brand-surface`}>
+            className={`${btnBase} border-gray-200 text-gray-500 hover:border-gray-900 hover:text-gray-900 bg-white`}>
             ←
           </Link>
-        : <span className={`${btnBase} border-brand-border/50 text-brand-text-faint/50 cursor-not-allowed`}>←</span>
+        : <span className={`${btnBase} border-gray-100 text-gray-300 cursor-not-allowed`}>←</span>
       }
 
       {pages[0] > 1 && (
         <>
           <Link href={pageUrl(1)}
-            className={`${btnBase} border-brand-border text-brand-text-muted hover:border-brand-text hover:text-brand-text bg-brand-surface`}>
+            className={`${btnBase} border-gray-200 text-gray-500 hover:border-gray-900 hover:text-gray-900 bg-white`}>
             1
           </Link>
           {pages[0] > 2 && (
-            <span className="w-[36px] text-center text-brand-text-faint text-[12px] select-none">&hellip;</span>
+            <span className="w-[36px] text-center text-gray-400 text-xs select-none">&hellip;</span>
           )}
         </>
       )}
@@ -41,8 +41,8 @@ export default function Pagination({ page, totalPage, baseUrl }: Props) {
         <Link key={p} href={pageUrl(p)}
           className={`${btnBase} ${
             p === page
-              ? 'bg-brand-text text-white border-brand-text shadow-sm'
-              : 'border-brand-border text-brand-text-muted hover:border-brand-text hover:text-brand-text bg-brand-surface'
+              ? 'bg-gray-900 text-white border-gray-900 shadow-sm'
+              : 'border-gray-200 text-gray-500 hover:border-gray-900 hover:text-gray-900 bg-white'
           }`}>
           {p}
         </Link>
@@ -51,10 +51,10 @@ export default function Pagination({ page, totalPage, baseUrl }: Props) {
       {pages[pages.length - 1] < totalPage && (
         <>
           {pages[pages.length - 1] < totalPage - 1 && (
-            <span className="w-[36px] text-center text-brand-text-faint text-[12px] select-none">&hellip;</span>
+            <span className="w-[36px] text-center text-gray-400 text-xs select-none">&hellip;</span>
           )}
           <Link href={pageUrl(totalPage)}
-            className={`${btnBase} border-brand-border text-brand-text-muted hover:border-brand-text hover:text-brand-text bg-brand-surface`}>
+            className={`${btnBase} border-gray-200 text-gray-500 hover:border-gray-900 hover:text-gray-900 bg-white`}>
             {totalPage}
           </Link>
         </>
@@ -62,10 +62,10 @@ export default function Pagination({ page, totalPage, baseUrl }: Props) {
 
       {page < totalPage
         ? <Link href={pageUrl(page + 1)}
-            className={`${btnBase} border-brand-border text-brand-text-muted hover:border-brand-text hover:text-brand-text bg-brand-surface`}>
+            className={`${btnBase} border-gray-200 text-gray-500 hover:border-gray-900 hover:text-gray-900 bg-white`}>
             →
           </Link>
-        : <span className={`${btnBase} border-brand-border/50 text-brand-text-faint/50 cursor-not-allowed`}>→</span>
+        : <span className={`${btnBase} border-gray-100 text-gray-300 cursor-not-allowed`}>→</span>
       }
     </div>
   )

@@ -2,6 +2,8 @@ import { supabase, type Barang } from '@/lib/supabase'
 import BarangCard from '@/components/BarangCard'
 import SidebarFilter from '@/components/SidebarFilter'
 import Pagination from '@/components/Pagination'
+import Image from 'next/image'
+import { ChevronRight } from 'lucide-react'
 
 const PER_PAGE = 20
 
@@ -12,7 +14,7 @@ export default async function HomePage({
 }) {
   const sp = await searchParams;
 
-  const kategoriAktif = sp.kategori || 'Semua'
+  const kategoriAktif = sp.kategori || 'All'
   const pencarian     = sp.q || ''
   const statusFilter  = sp.status || ''
   const page          = parseInt(sp.page || '1')
@@ -25,10 +27,10 @@ export default async function HomePage({
     .order('created_at', { ascending: false })
     .range(from, to)
 
-  if (kategoriAktif !== 'Semua') query = query.eq('kategori', kategoriAktif)
+  if (kategoriAktif !== 'All') query = query.eq('kategori', kategoriAktif)
   if (pencarian) query = query.ilike('nama', `%${pencarian}%`)
-  if (statusFilter === 'tersedia') query = query.eq('terjual', false)
-  if (statusFilter === 'terjual')  query = query.eq('terjual', true)
+  if (statusFilter === 'available') query = query.eq('terjual', false)
+  if (statusFilter === 'sold')  query = query.eq('terjual', true)
 
   const { data: barangList, count } = await query
 
@@ -46,84 +48,77 @@ export default async function HomePage({
   const totalPage = Math.ceil((count || 0) / PER_PAGE)
 
   const baseParams = new URLSearchParams()
-  if (kategoriAktif !== 'Semua') baseParams.set('kategori', kategoriAktif)
+  if (kategoriAktif !== 'All') baseParams.set('kategori', kategoriAktif)
   if (pencarian) baseParams.set('q', pencarian)
   const baseUrl = `/?${baseParams.toString()}`
 
   return (
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Breadcrumbs */}
+      <div className="flex items-center space-x-2 text-xs text-gray-500 mb-6">
+        <span className="hover:underline">Home</span>
+        <ChevronRight className="h-3 w-3" />
+        <span className="text-gray-900 font-medium">Catalog</span>
+      </div>
 
-    <main className="max-w-350 mx-auto px-4 md:px-6 py-6 md:py-10">
-      <div className="flex flex-col md:flex-row gap-6 md:gap-10">
-        <div className="w-full md:w-56 shrink-0 md:sticky top-20 h-fit space-y-4 md:space-y-8">
-          <form action="/" method="GET">
-            <div className="relative">
-              <input
-                type="text"
-                name="q"
-                defaultValue={pencarian}
-                placeholder="Cari barang..."
-                className="w-full pl-3 pr-8 py-2.5 text-[13px] bg-brand-surface border border-brand-border
-                           text-brand-text placeholder:text-brand-text-faint
-                           focus:outline-none focus:border-brand-text transition-all duration-200"
-              />
-              {pencarian && (
-                <button type="button" 
-                  onClick={() => window.location.href = '/'}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-brand-text-faint hover:text-brand-text transition-colors text-[16px] leading-none">
-                  &times;
-                </button>
-              )}
-            </div>
-            {kategoriAktif !== 'Semua' && (
-              <input type="hidden" name="kategori" value={kategoriAktif} />
-            )}
-          </form>
+      {/* Header */}
+      <div className="mb-2">
+        <div className="flex items-center gap-2">
+          <Image src="/bowatzzteks.png" alt="bowatz" width={100} height={22} className="object-contain translate-y-1" />
+          </div>
+      </div>
 
-          <SidebarFilter
-            kategoriList={kategoriCount}
-            totalSemua={rawCount?.length || 0}
-            aktif={kategoriAktif}
-          />
+      {/* Top Controls */}
+      <div className="flex items-center justify-between border-y border-gray-200 py-4 mb-8">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm font-semibold uppercase">{count || 0} Items</span>
+        </div>
+      </div>
+
+      <div className="flex gap-10">
+        {/* Sidebar Filter */}
+        <div className="hidden lg:block w-64 flex-shrink-0">
+          <div className="sticky top-24">
+            <SidebarFilter
+              kategoriList={kategoriCount}
+              totalSemua={rawCount?.length || 0}
+              aktif={kategoriAktif}
+            />
+          </div>
         </div>
 
+        {/* Mobile Filter + Product Grid */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-5">
-            <p className="text-[11px] text-brand-text-muted uppercase tracking-widest font-semibold">
-              {count || 0} Hasil
-            </p>
-            {pencarian && (
-              <p className="text-[11px] text-brand-text-faint">
-                Pencarian: &ldquo;{pencarian}&rdquo;
-              </p>
-            )}
+          <div className="lg:hidden mb-4">
+            <SidebarFilter
+              kategoriList={kategoriCount}
+              totalSemua={rawCount?.length || 0}
+              aktif={kategoriAktif}
+            />
           </div>
 
           {barangList && barangList.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-10">
               {barangList.map((barang) => (
-                <div key={barang.id} className="bg-brand-surface border border-brand-border
-                                                hover:shadow-lg hover:shadow-black/5 transition-shadow duration-300">
-                  <BarangCard barang={barang as Barang} />
-                </div>
+                <BarangCard key={barang.id} barang={barang as Barang} />
               ))}
             </div>
           ) : (
-            <div className="border-2 border-dashed border-brand-border py-24 text-center">
-              <p className="text-[14px] text-brand-text-muted font-medium mb-1">
-                Tidak ada barang ditemukan
+            <div className="border-2 border-dashed border-gray-200 py-24 text-center">
+              <p className="text-sm text-gray-500 font-medium mb-1">
+                No items found
               </p>
-              <p className="text-[12px] text-brand-text-faint">
-                Coba ubah filter atau kata kunci pencarian
+              <p className="text-xs text-gray-400">
+                Try changing filters or search keywords
               </p>
             </div>
           )}
 
           {totalPage > 1 && (
-            <div className="mt-10 border-t border-brand-border pt-6">
+            <div className="mt-16 flex justify-center">
               <Pagination page={page} totalPage={totalPage} baseUrl={baseUrl} />
             </div>
           )}
-
         </div>
       </div>
     </main>
